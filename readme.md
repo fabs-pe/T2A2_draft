@@ -88,6 +88,113 @@ In conclusion, an ORM is a valuable tool that streamlines database interactions,
 
 ##  R5	Document all endpoints for your API
 
+### User Endpoints 
+
+#### Method - POST
+
+![user login](/docs/login.png)
+
+#### Route : /auth/register
+
+![reg route](/docs/user%20reg.png)
+
+Shows email is required field
+
+![reg route](/docs/email%20req.png)
+
+#### Route : /auth/login
+
+![reg route](/docs/login.png)
+
+### Artist Endpoints
+
+#### Method - GET
+
+#### Route : /artists
+
+![artists](/docs/artist%20list.png)
+
+#### Route /artists/<int:id>
+
+![artists](/docs/one%20artist.png)
+
+#### Method - POST
+
+#### Route /artists
+
+![artists](/docs/post%20artist.png)
+
+### Method -PATCH
+
+![artists](/docs/patch%20artist.png)
+
+### Method -DELETE
+
+![artists](/docs/artist%20delete.png)
+
+### Songs Endpoints
+
+#### Method - GET
+
+#### Route /songs
+
+![songs](/docs/all%20songs.png)
+
+#### Route  - /songs/ <int:id>
+
+![song](/docs/one%20song.png)
+
+#### Method - POST
+
+#### ROUTE - /songs
+
+![song](/docs/post%20song.png)
+
+#### Method - PATCH
+
+![song](/docs/patch%20song.png)
+
+#### Method - DELETE
+
+![songs](/docs/delete%20song.png)
+
+#### Song Authorisation
+
+![songs](/docs/delete%20not%20song.png)
+
+![songs](/docs/song%20not%20found.png)
+
+### Playlist Endpoints
+
+#### Method -GET
+
+#### Route /playlists
+
+![playlists](/docs/playlists.png)
+
+#### Route /playlists/<int:id>
+
+![playlist](/docs/playlist.png)
+
+#### Method -POST
+
+![playlist](/docs/playlist%20post.png)
+
+#### Method - DELETE
+
+![playlist](/docs/delete%20playlist.png)
+
+### Playlist Authorisation
+
+![playlist](/docs/playlist%20not%20found.png)
+
+![playlist](/docs/playlist%20valid.png)
+
+![playlist](/docs/playlist%20valid1.png)
+
+
+
+
 ## R6 An ERD for your app
 
 ![ERD Image](/docs/Playlist_ERD.png)
@@ -201,12 +308,29 @@ This is a join table for the playlists and songs models
 
 ## R10 Describe the way tasks are allocated and tracked in your project
 
-https://trello.com/invite/b/4o8NzsAY/ATTI0e87f71eb1a113d3eac88988c4f101d5D53B6284/playlist-api
+ **[Trello Board](https://trello.com/invite/b/4o8NzsAY/ATTI0e87f71eb1a113d3eac88988c4f101d5D53B6284/playlist-api)**
 
+ Trello was used to plan and track progress of the API
 
+ I used 4 boards 
+ - To Do
+ - Doing
+ - Done
+ - On going
 
+ I found the on going was useful to remind of tasks about documention and comments
 
-
+![trello board](/docs/trello1.jpg)
+![trello board](/docs/trello10.jpg)
+![trello board](/docs/trello2.jpg)
+![trello board](/docs/trello3.jpg)
+![trello board](/docs/trello4.jpg)
+![trello board](/docs/trello5.jpg)
+![trello board](/docs/trello6.jpg)
+![trello board](/docs/trello7.jpg)
+![trello board](/docs/trello7.jpg)
+![trello board](/docs/trello8.jpg)
+![trello board](/docs/trello9.jpg)
 
 
 
