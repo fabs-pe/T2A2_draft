@@ -39,22 +39,22 @@ def create_artist():
     return artist_schema.dump(artist), 201 # return data
 
 # Add Song to db with artist id
-@artists_bp.route('/<int:artist_id>', methods = ['POST'])
+@artists_bp.route('/addsong/<int:artist_id>', methods = ['POST'])
 @jwt_required()
 def add_song(artist_id):
     body_data = request.get_json()
-    stmt =  db.select(Artist)
+    stmt =  db.select(Artist).filter_by(id=artist_id) 
     artist = db.session.scalar(stmt)
     if artist:
         song = Song(
             title = body_data.get('title'), # song fields
             genre = body_data.get('genre'), # song fields
-            artist_id = artist_id
+            artist = artist
         )
 
         db.session.add(song)
         db.session.commit()
-        return artist_schema.dump(song), 201 # returns new son id
+        return artist_schema.dump(artist), 201 # returns new song id
     else:
         return {'error': f'Artist not found with id {artist_id}'}, 404
     

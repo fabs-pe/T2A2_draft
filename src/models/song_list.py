@@ -10,11 +10,11 @@ class Songlist(db.Model):
     playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'), nullable=False)
 
     song = db.relationship('Song', back_populates='songlists',  cascade='all, delete')
-    playlist = db.relationship('Playlist', back_populates='songlists',  cascade='all, delete')
+    playlist = db.relationship('Playlist', back_populates='songlists')#,  cascade='all, delete')
 
 class SonglistSchema(ma.Schema):
     playlist = fields.Nested('PlaylistSchema', only = ['id','title', 'description']) # joins 
-    song = fields.Nested('SongSchema', only = ['title', 'genre'])
+    song = fields.Nested('SongSchema', exclude = ['songlists'])
     
     class Meta:
         fields = ('id','playlist', 'song')

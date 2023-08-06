@@ -22,7 +22,7 @@ class Playlist(db.Model):
 
 class PlaylistSchema(ma.Schema):
     user = fields.Nested('UserSchema', only = ['name', 'email']) # joins user fields to playlist
-    songlists = fields.List(fields.Nested('SonglistSchema'), only= ['song_id'])
+    songlists = fields.List(fields.Nested('SonglistSchema'), only= ['song'])
 
     title = fields.String(required=True, validate=And(
         Length(min=2, error='Title must be at least 2 characters long'),

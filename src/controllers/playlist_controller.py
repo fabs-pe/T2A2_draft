@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from init import db
 from models.playlist import Playlist, playlists_schema, playlist_schema
 from models.song import Song, song_schema, songs_schema
+from models.song_list import Songlist
 from models.artist import Artist
 from models.user import User
 from datetime import date
@@ -35,7 +36,8 @@ def create_playlist():
         user_id = get_jwt_identity(),
         title = body_data.get('title'),
         description = body_data.get('description'),
-        date_created = date.today()
+        date_created = date.today(),
+        # songlists = songlists 
     )
     db.session.add(playlist)
     db.session.commit()
@@ -77,30 +79,13 @@ def update_one_playlist(id):
         return {'error' : f'Playlist with id {id} not found'}, 404  # Id not found to be deleted
     
 
+
+
+
 # will authorise if user is admin by checking if user. is_admin = True
 def authorise_as_admin():
     user_id = get_jwt_identity()
     stmt = db.select(User).filter_by(id= user_id)
     user = db.session.scalar(stmt)
     return user.is_admin
-    
-# Add Song to db with artist id
-# @artists_bp.route('/<int:artist_id>', methods = ['POST'])
-# @jwt_required()
-# def add_song(artist_id):
-#     body_data = request.get_json()
-#     stmt =  db.select(Artist)
-#     artist = db.session.scalar(stmt)
-#     if artist:
-#         song = Song(
-#             title = body_data.get('title'), # song fields
-#             genre = body_data.get('genre'), # song fields
-#             artist_id = artist_id
-#         )
-
-#         db.session.add(song)
-#         db.session.commit()
-#         return artist_schema.dump(song), 201 # returns new son id
-#     else:
-#         return {'error': f'Artist not found with id {artist_id}'}, 404
     

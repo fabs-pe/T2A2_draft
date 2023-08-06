@@ -5,6 +5,8 @@ from flask_jwt_extended import create_access_token
 from psycopg2 import errorcodes
 from sqlalchemy.exc import IntegrityError
 from datetime import timedelta
+from flask_jwt_extended import get_jwt_identity, jwt_required
+
 
 auth_bp = Blueprint('auth', __name__, url_prefix ='/auth')
 
@@ -46,4 +48,57 @@ def auth_login():
         return {'email' : user.email, 'token' : token, 'is_admin' : user.is_admin}
     else:
         return { 'error' : 'Invalid email or password'}, 401
-                                                  
+    
+
+#list users. Admin only
+@auth_bp.route('/users', methods =['GET'])
+@jwt_required()
+def get_all_users():
+    is_admin = authorise_as_admin() # check to see if user is admin function
+    if not is_admin:
+        return {'error' : 'Not authorised to view users'}, 403
+    stmt = db.select(User)
+    users =db.session.scalars(stmt)
+    return users_schema.dump(users)
+
+# delete users. Admin Only
+@auth_bp.route('/delete/<int:id>', methods =['DELETE'])
+@jwt_required()
+def delete_one_user(id):
+    is_admin = authorise_as_admin() #check if user is admin
+    if not is_admin:
+        return {'error' : 'Not authorised to delete users'}, 403
+    stmt =db.select(User). filter_by(id=id) #excutes if user is admin
+    user = db.session.scalar(stmt)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return {'message': f'{user.id} has been deleted successfully'} # let admin know user was deleted
+    else:
+        return {'error' : f'User not found with id {id}'}, 404 # let admin know that the user doesnt exist
+    
+# Edit User. Can only edit own profile
+@auth_bp.route('/<int:id>', methods = ['PUT', 'PATCH'])
+@jwt_required()
+def update_one_user(id):
+    body_data = request.get_json() #excutes if user is admin
+    stmt = db.select(User).filter_by(id =id)  # Select * from User where id = id
+    user= db.session.scalar(stmt)
+    if user:
+        if str(user.id) != get_jwt_identity():
+            return { 'error' : 'Only the owner of the profile can make changes'}, 403
+        user.name = body_data.get('name') or user.name # entries that can edited
+        user.email = body_data.get('email') or user.email # entries that can edited
+        user.password = body_data.get('password') or user.password # entries that can edited
+        db.session.commit()
+        return user_schema.dump(user)
+    
+    else: 
+        return {'error' : f'User with id {id} not found'}, 404  # Id not found to be deleted
+
+# will authorise if user is admin by checking if user. is_admin = True
+def authorise_as_admin():
+    user_id = get_jwt_identity()
+    stmt = db.select(User).filter_by(id= user_id)
+    user = db.session.scalar(stmt)
+    return user.is_admin       

@@ -29,17 +29,23 @@ def get_one_song(id):
 # Create new Song Model Instance
 @songs_bp.route('/', methods = ['POST'])
 @jwt_required()
-def create_song():
-    body_data = song_schema.load(request.get_json())
-    song = Song(
-        artist_id = get_jwt_identity(),
-        genre = body_data.get('genre'),
-        title = body_data.get('title'),
-    )
-    db.session.add(song) 
-    db.session.commit()
+def create_song(artist_id):
+    body_data = request.get_json()
+    stmt = db.select(Artist).filter_by(id=artist_id)
+    artist = db.session.scalar(stmt)
+    if artist:
+        song = Song(
+            artist_id = get_jwt_identity(),
+            genre = body_data.get('genre'),
+            title = body_data.get('title'),
+            artist= artist
+        )
+        db.session.add(song) 
+        db.session.commit()
 
-    return song_schema.dump(song), 201
+        return song_schema.dump(song), 201
+    else:
+        return {'error': f'Song not found with id {artist_id}'}
 
 # Delete a single song
 @songs_bp.route('/<int:id>', methods =['DELETE']) # the id of song to be deleted
