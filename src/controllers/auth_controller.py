@@ -61,6 +61,21 @@ def get_all_users():
     users =db.session.scalars(stmt)
     return users_schema.dump(users)
 
+#  Get one user by id
+@auth_bp.route('users/<int:id>', methods =['GET'])
+@jwt_required()
+def get_one_user(id):
+    is_admin = authorise_as_admin() # check to see if user is admin function
+    if not is_admin:
+        return {'error' : 'Not authorised to view users'}, 403
+    stmt = db.select(User).filter_by(id=id) 
+    user = db.session.scalar(stmt)
+    if user:
+        return user_schema.dump(user)
+    else:
+        return{'error': f'User with id {id} not found'}
+    
+
 # delete users. Admin Only
 @auth_bp.route('/delete/<int:id>', methods =['DELETE'])
 @jwt_required()

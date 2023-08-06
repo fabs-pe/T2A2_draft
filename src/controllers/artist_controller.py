@@ -24,10 +24,13 @@ def get_one_artist(id):
     else:
         return{'error': f'Artist with id {id} not found'}
     
-# Create a new artist model instance
+# Create a new artist model instance, Admin Only
 @artists_bp.route('/', methods = ['POST'])
 @jwt_required()
 def create_artist():
+    is_admin = authorise_as_admin() #check if user is admin
+    if not is_admin:
+        return {'error' : 'Not authorised to add an artist'}, 403
     body_data = request.get_json()
     artist = Artist(
         artist_name = body_data.get('artist_name'),

@@ -41,9 +41,9 @@ def create_songlist():
 
     return playlist_schema.dump(playlist), 201
     
-@songlists_bp.route('/addsong/<int:id>', methods = ['POST'])
+@songlists_bp.route('/addsong', methods = ['POST'])
 @jwt_required()
-def song_to_list(id):
+def song_to_list():
     body_data = request.get_json()
     songlist = Songlist(
         song_id = body_data.get('song_id'),

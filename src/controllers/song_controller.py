@@ -29,23 +29,20 @@ def get_one_song(id):
 # Create new Song Model Instance
 @songs_bp.route('/', methods = ['POST'])
 @jwt_required()
-def create_song(artist_id):
+def create_song():
+    is_admin = authorise_as_admin()
+    if not is_admin:
+        return {'error' : 'Not authorised to delete songs'}, 403
     body_data = request.get_json()
-    stmt = db.select(Artist).filter_by(id=artist_id)
-    artist = db.session.scalar(stmt)
-    if artist:
-        song = Song(
-            artist_id = get_jwt_identity(),
-            genre = body_data.get('genre'),
-            title = body_data.get('title'),
-            artist= artist
-        )
-        db.session.add(song) 
-        db.session.commit()
+    song = Song(
+        genre = body_data.get('genre'),
+        title = body_data.get('title'),
+        artist_id = body_data.get('artist_id')
+    )
+    db.session.add(song) # add new data to database
+    db.session.commit()
 
-        return song_schema.dump(song), 201
-    else:
-        return {'error': f'Song not found with id {artist_id}'}
+    return song_schema.dump(song), 201 #return data
 
 # Delete a single song
 @songs_bp.route('/<int:id>', methods =['DELETE']) # the id of song to be deleted
@@ -79,6 +76,8 @@ def update_one_song(id):
     if song:
         song.title = body_data.get('title') or song.title # entries that can edited
         song.genre = body_data.get('genre') or song.genre # entries that can edited
+        song.artist.id = body_data.get('artist_id') or song.artist.id
+        
         db.session.commit()
         return song_schema.dump(song)
     

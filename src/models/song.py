@@ -20,7 +20,7 @@ class Song(db.Model):
     songlists = db.relationship('Songlist', back_populates='song',  cascade='all, delete')
 
 class SongSchema(ma.Schema):
-    artist = fields.Nested('ArtistSchema', only = ['artist_name', 'country']) # joins 
+    artist = fields.Nested('ArtistSchema', only = ['artist_name', 'country', 'id']) # joins 
     songlists = fields.List(fields.Nested('SonglistSchema'))
 
     genre = fields.String(validate=OneOf(VALID_GENRE))
