@@ -25,22 +25,7 @@ def get_one_list(id):
         return {'error': f'Songlist not found with id {id}'}, 404
     
 
-# Create new songlist model Instance
-@songlists_bp.route('/', methods = ['POST'])
-@jwt_required()
-def create_songlist():
-    body_data = request.get_json()
-    playlist = Playlist(
-        user_id = get_jwt_identity(),
-        title = body_data.get('title'),
-        description = body_data.get('description'),
-        date_created = date.today()
-    )
-    db.session.add(playlist)
-    db.session.commit()
-
-    return playlist_schema.dump(playlist), 201
-    
+# Create new songlist model Instance    
 @songlists_bp.route('/addsong', methods = ['POST'])
 @jwt_required()
 def song_to_list():
