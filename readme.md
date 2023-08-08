@@ -1,5 +1,12 @@
 # Playlist Api Web Server
 
+## Links
+
+[GitHub](https://github.com/fabs-pe/T2A2_draft)
+
+[Trello Board](https://trello.com/invite/b/4o8NzsAY/ATTI0e87f71eb1a113d3eac88988c4f101d5D53B6284/playlist-api)
+
+
 ## **Installation and Setup**
 
 - Create a folder locally to store the API. 
