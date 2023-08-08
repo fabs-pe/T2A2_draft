@@ -90,108 +90,602 @@ In conclusion, an ORM is a valuable tool that streamlines database interactions,
 
 ### User Endpoints 
 
-#### Method - POST
+<p align="center"> Auth Routes in Postman </p>
+<p align="center"><img src="./docs/auth_routes.png" width = 50%></p>
 
-![user login](/docs/login.png)
+## '/auth/users'
 
-#### Route : /auth/register
+**METHODS : GET**
 
-![reg route](/docs/user%20reg.png)
+- Arguments: None
+- Description: A route to list all users 
+- Authentication: JWT Required
+- Authorization: Must be admin (Bearer Token)
 
-Shows email is required field
+<p align="center"> Error When User Not Admin </p>
+<p align="center"><img src="./docs/view_users.png" width = 70%></p>
 
-![reg route](/docs/email%20req.png)
+## '/auth/users/<int:id>'
 
-#### Route : /auth/login
+**METHODS : GET**
 
-![reg route](/docs/login.png)
+- Arguments: Users id number
+- Description: A route to list one id that matches called id
+- Authentication: JWT Required
+- Authorization: Must be admin (Bearer Token)
 
-### Artist Endpoints
+## '/auth/register'
 
-#### Method - GET
+**METHODS: POST**
 
-#### Route : /artists
+- Arguments: Users id number
+- Description: register a new user into the database
+- Authentication: None
+- Authorization: None
 
-![artists](/docs/artist%20list.png)
+**Request Body:**
 
-#### Route /artists/<int:id>
+This will create a user that is not admin
 
-![artists](/docs/one%20artist.png)
+```json
+{
+   "name": "test user2",
+    "email": "test@email3.com",
+    "password" : "password"
+    }
 
-#### Method - POST
+```
+<p align="center"> Request Reponse </p>
+<p align="center"><img src="./docs/user reg.png" width = 70%></p>
 
-#### Route /artists
+<p align="center"> Error When User try to register the same email </p>
+<p align="center"><img src="./docs/already_reg.png" width = 70%></p>
+<p align="center"> Error when not supplying email </p>
+<p align="center"><img src="./docs/email req.png" width = 70%></p>
 
-![artists](/docs/post%20artist.png)
+## '/auth/login'
 
-### Method -PATCH
+**METHODS: POST**
 
-![artists](/docs/patch%20artist.png)
+- Arguments: None
+- Description: route to login users/admin and receive a token to use for authentication and authorization
+- Authentication: Email & Password
+- Authorization: None
 
-### Method -DELETE
+**Request Body:**
 
-![artists](/docs/artist%20delete.png)
+```json
+{
+    "email" : "admin@theboss.com",
+    "password" : "admin2417"
+}
+```
 
-### Songs Endpoints
+**Reponse Body:**
 
-#### Method - GET
+```json
+{
+    "email": "admin@theboss.com",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY5MTMxNjgzNywianRpIjoiNDYwYTc5NWQtM2M4OS00ZmRjLWJjMzYtZGM2NWVhYjM1NzViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE2OTEzMTY4MzcsImV4cCI6MTY5MTQwMzIzN30.6P7EAPBLYHMQbG3YFiWx_uWRc_MoGRzWHBkA4XbaHo0",
+    "is_admin": true
+}
+```
 
-#### Route /songs
+## '/auth/delete/<int:id>'
 
-![songs](/docs/all%20songs.png)
+**METHODS : DELETE**
 
-#### Route  - /songs/ <int:id>
+- Arguments: user id  (integer) being searched for in URL
+- Description: 
+- Authentication: JWT Required
+- Authorization: Must be admin (Bearer Token)
 
-![song](/docs/one%20song.png)
+<p align="center"> Deleting a user </p>
+<p align="center"><img src="./docs/delete user.png" width = 70%></p>
 
-#### Method - POST
+## '/auth/delete/<int:id>'
 
-#### ROUTE - /songs
+**METHODS : PATCH PUT**
 
-![song](/docs/post%20song.png)
+- Arguments: user id  (integer) being searched for in URL
+- Description: route that allows a user to update their own profile
+- Authentication: JWT Required
+- Authorization: Bearer Token
 
-#### Method - PATCH
+**Request Body:**
 
-![song](/docs/patch%20song.png)
+```json
+{
+    "name" : "test 1 name",
+    "email" : "test23@email",
+    "password" : "newpassword"
+}
+```
 
-#### Method - DELETE
+**Reponse Body**
 
-![songs](/docs/delete%20song.png)
+```json
+{
+    "name": "test 1 name",
+    "id": 2,
+    "email": "test23@email",
+    "is_admin": false,
+    "playlists": []
+}
+```
+### Playlist Endpoints 
 
-#### Song Authorisation
+<p align="center"> Playlist Routes in Postman </p>
+<p align="center"><img src="./docs/playlist_routes.png" width = 50%></p>
 
-![songs](/docs/delete%20not%20song.png)
+## '/playlists'
 
-![songs](/docs/song%20not%20found.png)
+**METHODS : GET**
 
-### Playlist Endpoints
+- Arguments: None
+- Description: Route to display all playlists
+- Authentication: None
+- Authorization: None
 
-#### Method -GET
+<p align="center"> Results of Listing Playlists </p>
+<p align="center"><img src="./docs/playlist_results.png" width = 70%></p>
 
-#### Route /playlists
+## '/playlists/<int:id>'
 
-![playlists](/docs/playlists.png)
+**METHODS : GET**
 
-#### Route /playlists/<int:id>
+- Arguments: playlist is being searched for in the URL
+- Description: Route to display one playlists
+- Authentication: None
+- Authorization: None
 
-![playlist](/docs/playlist.png)
+## '/playlists'
 
-#### Method -POST
+**METHODS : POST**
 
-![playlist](/docs/playlist%20post.png)
+- Arguments: None
+- Description: Route to add one new playlists
+- Authentication: None
+- Authorization: Bearer Token (must be signed in)
 
-#### Method - DELETE
+**Request Body**
 
-![playlist](/docs/delete%20playlist.png)
+```Json
+{
+    "title" : "Test Playlist 133",
+    "description" : "Test Description"
+}
+```
 
-### Playlist Authorisation
+**Response Body**
 
-![playlist](/docs/playlist%20not%20found.png)
+```json
+{
+    "id": 13,
+    "title": "Test Playlist 133",
+    "date_created": "2023-08-08",
+    "description": "Test Description",
+    "songlists": []
+}
+```
+# '/playlists/<int:id>'
 
-![playlist](/docs/playlist%20valid.png)
+**METHODS : PATCH**
 
-![playlist](/docs/playlist%20valid1.png)
+- Arguments: playlist id being searched for in the URL
+- Description: Route to edit a playlist owned by the user
+- Authentication: JWT Required
+- Authorization: Bearer Token
 
+<p align="center"> Error When User try to edit a playlist thats doesnt belong to user </p>
+<p align="center"><img src="./docs/owner_only.png" width = 70%></p>
+
+## '/playlists/<int:id>'
+
+**METHODS : DELETE**
+
+- Arguments: playlist id  (integer) being searched for in URL
+- Description: Route to delete a playlist
+- Authentication: JWT Required
+- Authorization: Bearer Token
+
+<p align="center"> Success Message When playlist deleted </p>
+<p align="center"><img src="./docs/delete_playlist.png" width = 70%></p>
+
+<p align="center"> Error When Wrong User Tries To Delete A Playlist </p>
+<p align="center"><img src="./docs/playlist_owner.png" width = 70%></p>
+
+<p align="center"> Playlist Doesnt Exist </p>
+<p align="center"><img src="./docs/delete_error.png" width = 70%></p>
+
+## '/artists'
+
+**METHODS : GET**
+
+- Arguments: None
+- Description: route that displays all artists and their songs
+- Authentication: None
+- Authorization: None
+
+<p align="center"> List of artists </p>
+<p align="center"><img src="./docs/artist_list.png" width = 70%></p>
+
+## '/artists/<int:id>'
+
+**METHODS : GET**
+
+- Arguments: artist id (integer) being searched for in URL
+- Description: route that displays one artists and their songs
+- Authentication: None
+- Authorization: None
+
+<p align="center"> Error if artist id doesnt exist </p>
+<p align="center"><img src="./docs/no_artist.png" width = 70%></p>
+
+## '/artists'
+
+**METHODS : POST**
+
+- Arguments: None
+- Description: route that allows an artists to be added to the database
+- Authentication: JWT Required
+- Authorization: Bearer Token
+
+**Request Body**
+
+```json
+{
+    "artist_name": " final test artist ",
+    "country" : "test country 3"
+}
+```
+
+<p align="center"> Error if user is an admin </p>
+<p align="center"><img src="./docs/not_added_artist.png" width = 70%></p>
+
+## '/artists/addsong/<int:id>'
+
+**METHODS : POST**
+
+- Arguments: artist id of the artist for the song to added too
+- Description: route that allows a song be added to an artist
+- Authentication: JWT Required
+- Authorization: Must be admin (Bearer Token)
+
+**Request Body**
+
+```json
+{
+    "title": " final test artist ",
+    "genre": "test country 4"
+    
+}
+```
+**Response Body**
+
+```json
+{
+    "id": 1,
+    "artist_name": "Usher",
+    "country": "America",
+    "songs": [
+        {
+            "title": " final test artist ",
+            "genre": "test country 3"
+        },
+        {
+            "title": " final test artist ",
+            "genre": "test country 4"
+        }
+    ]
+}
+```
+## '/artists/<int:id>'
+
+**METHODS : PATCH**
+
+- Arguments: artist id  (integer) being searched for in URL
+- Description: Edit an artists details
+- Authentication: JWT Required
+- Authorization: Must be admin (Bearer Token)
+
+
+**Request Body**
+
+```json
+{
+    "artist_name" : "Name edited",
+    "country" : "country edited"
+}
+```
+<p align="center"> Error When Non Admin tries to edit artist </p>
+<p align="center"><img src="./docs/not_auth_artist.png" width = 70%></p>
+
+## '/artists/<int:id>'
+
+**METHODS : DELETE**
+
+- Arguments: artist id  (integer) being searched for in URL
+- Description: delete an artists 
+- Authentication: JWT Required
+- Authorization: Must be admin (Bearer Token)
+
+<p align="center"> Error When Non Admin tries to delete an artist </p>
+<p align="center"><img src="./docs/not_auth_delete.png" width = 70%></p>
+
+<p align="center"> Successfully Deleted </p>
+<p align="center"><img src="./docs/delete_success.png" width = 70%></p>
+
+### Song Endpoints 
+
+<p align="center"> Song Routes in Postman </p>
+<p align="center"><img src="./docs/song_routes.png" width = 50%></p>
+
+## '/songs'
+
+**METHODS : GET**
+
+- Arguments: None
+- Description: route that displays all songs
+- Authentication: None
+- Authorization: None
+
+<p align="center"> Display All Songs </p>
+<p align="center"><img src="./docs/songs_display.png" width = 50%></p>
+
+## '/songs/<int:id>'
+
+**METHODS : GET**
+
+- Arguments: song id (integer) being searched for in URL
+- Description: route that displays one songs
+- Authentication: None
+- Authorization: None
+
+<p align="center"> Display Song and playlist that its in </p>
+<p align="center"><img src="./docs/one_song.png" width = 50%></p>
+
+<p align="center"> Error: Song id not found </p>
+<p align="center"><img src="./docs/no_song.png" width = 50%></p>
+
+## '/song/<int:id>'
+
+**METHODS : DELETE**
+
+- Arguments: song id  (integer) being searched for in URL
+- Description: delete a song 
+- Authentication: JWT Required
+- Authorization: Must be admin (Bearer Token)
+
+<p align="center"> Song Successfully Deleted </p>
+<p align="center"><img src="./docs/song_deleted.png" width = 50%></p>
+
+<p align="center"> Song Not Found </p>
+<p align="center"><img src="./docs/not_delete_song.png" width = 50%></p>
+
+<p align="center"> Not Auth To Delete </p>
+<p align="center"><img src="./docs/no_auth_song.png" width = 50%></p>
+
+## '/song'
+
+**METHODS : POST**
+
+- Arguments: None
+- Description: Route to add a song
+- Authentication: JWT Required
+- Authorization: Must be admin (Bearer Token)
+
+**Request Body**
+
+```json
+{
+    "title" : "test playlist",
+    "genre" : " test list",
+    "artist_id" : "10"
+
+}
+
+```
+
+**Response Body**
+
+```json
+{
+    "id": 33,
+    "title": "test playlist",
+    "genre": " test list",
+    "artist": {
+        "artist_name": null,
+        "country": null
+    },
+    "songlists": []
+}
+
+```
+
+## '/song/<int:id>'
+
+**METHODS : PATCH**
+
+- Arguments: song id (integer) being searched for in URL
+- Description: Route to edit a song
+- Authentication: JWT Required
+- Authorization: Must be admin (Bearer Token)
+
+**Request Body**
+
+```json
+{
+    "title" : "test song edited",
+    "genre" : "Pop"
+}
+```
+
+**Response Body**
+
+```json
+{
+    "id": 8,
+    "title": "test song edited",
+    "genre": "Pop",
+    "artist": {
+        "artist_name": "David Guetta",
+        "country": "France",
+        "id": 4
+    },
+    "songlists": [
+        {
+            "id": 2,
+            "playlist": {
+                "id": 1,
+                "title": "Work",
+                "description": "Work Safe Music"
+            },
+            "song": {
+                "id": 8,
+                "title": "test song edited",
+                "genre": "Pop",
+                "artist": {
+                    "artist_name": "David Guetta",
+                    "country": "France",
+                    "id": 4
+                }
+            }
+        }
+    ]
+}
+
+```
+
+### Songlist Endpoints 
+
+<p align="center"> Songlist Routes in Postman </p>
+<p align="center"><img src="./docs/songlist_routes.png" width = 50%></p>
+
+## '/songlists'
+
+**METHODS : GET**
+
+- Arguments: None
+- Description: Route to display songs in a playlist id
+- Authentication: None
+- Authorization: Bearer Token
+
+<p align="center"> Displays Each Playlisy with each song </p>
+<p align="center"><img src="./docs/all_songlists.png" width = 50%></p>
+
+## '/songlists/<int:id>'
+
+- Arguments: songlist id
+- Description: Route to display one playlist with songs 
+- Authentication: None
+- Authorization: Bearer Token
+
+```json
+{
+    "id": 2,
+    "title": "Pre-drinks",
+    "date_created": "2023-08-05",
+    "description": "Get me pumped",
+    "songlists": [
+        {
+            "id": 35,
+            "playlist": {
+                "id": 2,
+                "title": "Pre-drinks",
+                "description": "Get me pumped"
+            },
+            "song": {
+                "id": 13,
+                "title": "Money, Money, Money",
+                "genre": "70s",
+                "artist": {
+                    "artist_name": "ABBA",
+                    "country": "Sweden",
+                    "id": 5
+                }
+            }
+        },
+        {
+            "id": 36,
+            "playlist": {
+                "id": 2,
+                "title": "Pre-drinks",
+                "description": "Get me pumped"
+            },
+            "song": {
+                "id": 15,
+                "title": "Sailing",
+                "genre": "70s",
+                "artist": {
+                    "artist_name": "Rod Stewart",
+                    "country": "England",
+                    "id": 6
+                }
+            }
+        },
+        {
+            "id": 37,
+            "playlist": {
+                "id": 2,
+                "title": "Pre-drinks",
+                "description": "Get me pumped"
+            },
+            "song": {
+                "id": 15,
+                "title": "Sailing",
+                "genre": "70s",
+                "artist": {
+                    "artist_name": "Rod Stewart",
+                    "country": "England",
+                    "id": 6
+                }
+            }
+        }
+    ]
+}
+
+```
+## '/songlists'
+
+**METHODS : POST**
+
+- Arguments: None
+- Description: Route to add song into a playlist id
+- Authentication: None
+- Authorization: Bearer Token
+
+**Request Body**
+
+```json
+{
+    "song_id" : "15",
+    "playlist_id" : "2"
+}
+```
+
+**Response Body**
+
+```json
+{
+    "id": 37,
+    "playlist": {
+        "id": 2,
+        "title": "Pre-drinks",
+        "description": "Get me pumped"
+    },
+    "song": {
+        "id": 15,
+        "title": "Sailing",
+        "genre": "70s",
+        "artist": {
+            "artist_name": "Rod Stewart",
+            "country": "England",
+            "id": 6
+        }
+    }
+}
+```
 
 
 
@@ -201,7 +695,7 @@ Shows email is required field
 
 ## R7 Detail any third party services that your app will use
 
-The below is a lit of third party services that were used in this app.
+The below is a list of third party services that were used in this app.
 
 **Psycopg2**
 
@@ -318,7 +812,9 @@ This is a join table for the playlists and songs models
  - Done
  - On going
 
- I found the on going was useful to remind of tasks about documention and comments
+ The cards were moved into the appropriate stages each time I revisited the Trello board.
+
+ I found the "on going" card was useful to remind me of tasks about documention and comments.
 
 ![trello board](/docs/trello1.jpg)
 ![trello board](/docs/trello10.jpg)
