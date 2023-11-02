@@ -8,6 +8,7 @@ class Artist(db.Model):
     artist_name = db.Column(db.String(50))
     country = db.Column(db.String(50))
 
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
     
     songs =db.relationship('Song', back_populates='artist',  cascade='all, delete')
 
